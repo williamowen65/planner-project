@@ -1,11 +1,13 @@
 <template>
-  <div class="project">
+  <div class="project" :class="{ complete: project.complete}">
       <div class="actions">
           <h3  @click="isClicked = !isClicked"> {{ project.title }} </h3>
           <div class="icons">
-              <span class="material-icons">edit</span>
+              <router-link :to="{ name: 'EditProject', params: { id: project.id }}">
+                <span class="material-icons">edit</span>
+              </router-link>
               <span @click="deleteProject" class="material-icons">delete</span>
-              <span class="material-icons">done</span>
+              <span @click="toggleComplete" class="material-icons tick">done</span>
           </div>
       </div>
       <div class="details" v-if="isClicked">
@@ -30,6 +32,16 @@ export default {
             fetch(this.uri, { method: 'DELETE' })
                 .then(() => this.$emit('delete', this.project.id))
                 .catch(err => console.log(err.message))
+        },
+        toggleComplete() {
+            //console.log('clicked');
+            fetch(this.uri, { 
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json'},
+                body: JSON.stringify({ complete: !this.project.complete })
+            }).then(() => {
+                    this.$emit('complete', this.project.id)
+                }).catch((err) => console.log(err.message))
         }
     }
 }
@@ -60,5 +72,11 @@ export default {
     }
     .material-icons:hover {
         color: #777;
+    }
+    .project.complete{
+        border-left: 4px solid #00ce89;
+    }
+    .project.complete .tick{
+        color: #00ce89;
     }
 </style>

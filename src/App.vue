@@ -1,7 +1,22 @@
 <template>
-
+  <Navbar/>
   <router-view/>
 </template>
+
+<script>
+import Navbar from './components/Navbar'
+
+export default {
+  components: { Navbar },
+  data() {
+    return {
+
+    }
+  }
+  
+}
+
+</script>
 
 <style>
 body {
